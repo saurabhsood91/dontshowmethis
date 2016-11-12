@@ -9,11 +9,12 @@
   "content_scripts": [
       {
         "matches": ["https://www.facebook.com/*"],
-        "js": ["bower_components/jquery/dist/jquery.js", "js/main.js"]
+        "js": ["bower_components/jquery/dist/jquery.js", "js/algorithmia.js", "js/main.js"]
       }
     ],
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "https://api.algorithmia.com/v1/web/algo/spullara/YahooOpenNSFW/0.1.1"
   ]
 }
