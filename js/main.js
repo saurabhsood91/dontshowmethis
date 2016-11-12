@@ -78,28 +78,74 @@ $(function() {
 
     };
 
-    // $(document).scroll(function(){
-    //     setTimeout(checkForDisallowedContent, 1500);
-    // });
-    setInterval(checkForDisallowedContent, 5000);
-    checkForDisallowedContent();
-    var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
-    photoList.forEach(function(img)
-    {
-        if(!$(img).hasClass('dont-hide'))
-        {
-            isNSFW(img.src,function(output)
+    var checkForDisallowedContentTwitter = function() {
+            postImageList = $('.AdaptiveMedia-photoContainer.js-adaptive-photo').find('img:visible').toArray()
+            postImageList.forEach(function(img)
             {
-                console.log(output);
-                if(output.result > 0.25)
+                if(!$(img).hasClass('dont-hide'))
                 {
-                    $(img).hide();
-                }
-                else
-                {
-                    $(img).addClass('dont-hide');
+                    isNSFW(img.src,function(output)
+                    {
+                        console.log(output)
+                        if(output.result > 0.25)
+                        {
+                            $(img).remove()
+                        }
+                        else
+                        {
+                            $(img).addClass('dont-hide');
+                        }
+                    })
                 }
             })
         }
-    });
+
+    // $(document).scroll(function(){
+    //     setTimeout(checkForDisallowedContent, 1500);
+    // });
+    var initialize = function() {
+        console.log('initializing');
+        chrome.storage.sync.get({
+            'sites': [],
+            'hideNSFW': false
+        }, function(options) {
+            var isNSFW = options.hideNSFW;
+            var sites = options.sites;
+            if(window.location.href.indexOf('https://www.facebook.com') !== -1) {
+                if(sites.length > 0 && sites.indexOf('Facebook') !== -1) {
+                    setInterval(checkForDisallowedContent, 5000);
+                    checkForDisallowedContent();
+                    var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
+                    photoList.forEach(function(img)
+                    {
+                        if(!$(img).hasClass('dont-hide'))
+                        {
+                            isNSFW(img.src,function(output)
+                            {
+                                console.log(output);
+                                if(output.result > 0.25)
+                                {
+                                    $(img).hide();
+                                }
+                                else
+                                {
+                                    $(img).addClass('dont-hide');
+                                }
+                            })
+                        }
+                    });
+                }
+            } else if(window.location.href.indexOf('https://twitter.com') !== -1) {
+                console.log('here');
+                if(sites.length > 0 && sites.indexOf('Twitter') !== -1) {
+                    console.log('running for twitter');
+                    setInterval(checkForDisallowedContentTwitter, 5000);
+                }
+            }
+
+        });
+    };
+    // document.addEventListener('DOMContentLoaded', initialize, false);
+    initialize();
+
 });
