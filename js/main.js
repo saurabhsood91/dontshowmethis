@@ -27,6 +27,7 @@ $(function() {
         // }
         if(videos.length > 0) {
             console.log(videos[0].src);
+            $($(videos[0]).closest('.userContentWrapper._5pcr')).hide();
         }
     }
 
