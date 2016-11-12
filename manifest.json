@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Dont Show Me This",
+  "description": "Chrome Extension to hide certain content from social networks",
+  "version": "1.0",
+  "page_action": {
+    "default_title": "Dont Show Me This"
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ]
+}
