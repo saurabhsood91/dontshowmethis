@@ -1,0 +1,17 @@
+{
+  "name": "dontshowmethis",
+  "homepage": "https://github.com/saurabhsood91/dontshowmethis",
+  "authors": [
+    "Saurabh Sood <saurabhsood91@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

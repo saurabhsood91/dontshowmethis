@@ -6,6 +6,12 @@
   "page_action": {
     "default_title": "Dont Show Me This"
   },
+  "content_scripts": [
+      {
+        "matches": ["https://www.facebook.com/*"],
+        "js": ["bower_components/jquery/dist/jquery.js", "js/main.js"]
+      }
+    ],
   "permissions": [
     "storage",
     "activeTab"
