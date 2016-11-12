@@ -100,7 +100,7 @@ $(function() {
             })
         }
 
-        var microsoftSentimentAnalysisFacebook = function(content) {
+        var microsoftSentimentAnalysis = function(content) {
                 // var params = {}
                 // var output = ""
                 var Inputdata = {
@@ -152,6 +152,7 @@ $(function() {
                 // return output
             };
 
+
     // $(document).scroll(function(){
     //     setTimeout(checkForDisallowedContent, 1500);
     // });
@@ -196,17 +197,25 @@ $(function() {
                             var posts = $('.userContentWrapper._5pcr:visible').find('p').toArray();
                             posts.forEach(function(paragraph)
                             {
-                                microsoftSentimentAnalysisFacebook(paragraph)
+                                microsoftSentimentAnalysis(paragraph)
                             })
-                        }, 1000);
+                        }, 5000);
                     }
                 }
             } else if(window.location.href.indexOf('https://twitter.com') !== -1) {
-                console.log('here');
                 if(sites.length > 0 && sites.indexOf('Twitter') !== -1) {
                     console.log('running for twitter');
                     if(optionNfsw) {
                         setInterval(checkForDisallowedContentTwitter, 5000);
+                    }
+                    if(optionNegative) {
+                        setInterval(function() {
+                            var posts = $('.TweetTextSize.js-tweet-text.tweet-text').toArray();
+                            posts.forEach(function(paragraph)
+                            {
+                                microsoftSentimentAnalysis(paragraph)
+                            });
+                        }, 5000);
                     }
                 }
             }
