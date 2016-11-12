@@ -12,7 +12,7 @@
   },
   "content_scripts": [
       {
-        "matches": ["https://www.facebook.com/*", "https://twitter.com/*"],
+        "matches": ["https://www.facebook.com/*", "https://twitter.com/*", "https://westus.api.cognitive.microsoft.com/*"],
         "js": ["bower_components/jquery/dist/jquery.js", "js/algorithmia.js", "js/main.js"]
       }
     ],

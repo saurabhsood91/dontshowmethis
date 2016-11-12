@@ -100,6 +100,58 @@ $(function() {
             })
         }
 
+        var microsoftSentimentAnalysisFacebook = function(content) {
+                // var params = {}
+                // var output = ""
+                var Inputdata = {
+                  "documents": [
+                    {
+                      "language": "en",
+                      "id": "string",
+                      "text": content.innerText
+                    }
+                  ]
+                }
+
+
+                $.ajax({
+                    url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment?" , //+ $.param(params),
+                    beforeSend: function(xhrObj){
+                        // Request headers
+                        xhrObj.setRequestHeader("Content-Type","application/json");
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","a8d7c1ca87d4433d9bcec1aa74642f4b");
+                    },
+                    type: "POST",
+                    // Request body
+                    data: JSON.stringify(Inputdata),
+                })
+                .done(function(data) {
+                    // console.log(data['documents'][0]['score'])
+                    // return data['documents'][0]['score']
+                    if(!$(content).hasClass('dont-hide'))
+                    {
+                        console.log(data['documents'][0]['score'])
+                        if (data['documents'][0]['score'] < 0.50 )
+                        {
+                            console.log(content.innerText)
+                            $(content).remove()
+                            console.log("removed paragraph")
+                        }
+                        else
+                        {
+                            $(content).addClass('dont-hide')
+                            console.log("Added to dont-hide class")
+                        }
+                    }
+
+                    // alert("success");
+                })
+                .fail(function() {
+                    // alert("error");
+                });
+                // return output
+            };
+
     // $(document).scroll(function(){
     //     setTimeout(checkForDisallowedContent, 1500);
     // });
@@ -107,42 +159,57 @@ $(function() {
         console.log('initializing');
         chrome.storage.sync.get({
             'sites': [],
-            'hideNSFW': false
+            'hideNSFW': false,
+            'negative': false
         }, function(options) {
-            var isNSFW = options.hideNSFW;
+            var optionNfsw = options.hideNSFW;
             var sites = options.sites;
+            var optionNegative = options.negative;
             if(window.location.href.indexOf('https://www.facebook.com') !== -1) {
                 if(sites.length > 0 && sites.indexOf('Facebook') !== -1) {
-                    setInterval(checkForDisallowedContent, 5000);
-                    checkForDisallowedContent();
-                    var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
-                    photoList.forEach(function(img)
-                    {
-                        if(!$(img).hasClass('dont-hide'))
+                    if(optionNfsw) {
+                        setInterval(checkForDisallowedContent, 5000);
+                        checkForDisallowedContent();
+                        var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
+                        photoList.forEach(function(img)
                         {
-                            isNSFW(img.src,function(output)
+                            if(!$(img).hasClass('dont-hide'))
                             {
-                                console.log(output);
-                                if(output.result > 0.25)
+                                isNSFW(img.src,function(output)
                                 {
-                                    $(img).hide();
-                                }
-                                else
-                                {
-                                    $(img).addClass('dont-hide');
-                                }
+                                    console.log(output);
+                                    if(output.result > 0.25)
+                                    {
+                                        $(img).hide();
+                                    }
+                                    else
+                                    {
+                                        $(img).addClass('dont-hide');
+                                    }
+                                })
+                            }
+                        });
+                    }
+                    if(optionNegative) {
+                        console.log('removing negative content');
+                        setInterval(function(){
+                            var posts = $('.userContentWrapper._5pcr:visible').find('p').toArray();
+                            posts.forEach(function(paragraph)
+                            {
+                                microsoftSentimentAnalysisFacebook(paragraph)
                             })
-                        }
-                    });
+                        }, 1000);
+                    }
                 }
             } else if(window.location.href.indexOf('https://twitter.com') !== -1) {
                 console.log('here');
                 if(sites.length > 0 && sites.indexOf('Twitter') !== -1) {
                     console.log('running for twitter');
-                    setInterval(checkForDisallowedContentTwitter, 5000);
+                    if(optionNfsw) {
+                        setInterval(checkForDisallowedContentTwitter, 5000);
+                    }
                 }
             }
-
         });
     };
     // document.addEventListener('DOMContentLoaded', initialize, false);

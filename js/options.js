@@ -69,8 +69,19 @@ var initialize = function() {
 
     };
 
+    var saveNegativeSettings = function() {
+        var negativeValue = document.querySelector('#optionsNegative').checked;
+        chrome.storage.sync.set({
+            'negative': negativeValue
+        }, function() {
+            console.log('Negative Settings saved');
+            document.querySelector('#status').innerHTML = 'Negative Settings Saved!';
+        });
+    };
+
     document.querySelector('#optionsTwitter').onchange = saveSiteSettings;
     document.querySelector('#optionsFacebook').onchange = saveSiteSettings;
+    document.querySelector('#optionsNegative').onchange = saveNegativeSettings;
 
 };
 
