@@ -22,12 +22,14 @@
 // });
 //
 // // $(function(){})
+var tags = [];
 
 var initialize = function() {
     chrome.storage.sync.get({
         'hideNSFW': false,
         'sites': [],
-        'negative': false
+        'negative': false,
+        'tags': []
     }, function(options) {
         document.querySelector('#optionsNSFW').checked = options.hideNSFW;
         document.querySelector('#optionsNegative').checked = options.negative;
@@ -44,6 +46,11 @@ var initialize = function() {
             document.querySelector('#optionsTwitter').checked = false;
         }
 
+        if(options.tags.length > 0) {
+            tags = options.tags;
+            showTags();
+        }
+
     });
 
     document.querySelector('#optionsNSFW').onchange = function(){
@@ -52,6 +59,62 @@ var initialize = function() {
             'hideNSFW': nsfwValue
         }, function() {
             document.querySelector('#status').innerHTML = 'NSFW option saved!';
+        });
+    };
+
+    document.querySelector('#btn-tags').onclick = function() {
+        // Get list of Tags
+        var selectedTags = $('#inputTags').tagsinput('items');
+        selectedTags.forEach(function(t) {
+            if(tags.indexOf(t) === -1) {
+                tags.push(t);
+            }
+        });
+        chrome.storage.sync.set({
+            'tags': tags
+        }, function() {
+            // Clear the Tags
+            $('#inputTags').tagsinput('removeAll');
+            showTags();
+        });
+    };
+
+    var showTags = function() {
+        // $('#all-tags').empty();
+        var allTags = document.querySelector('#all-tags');
+        allTags.innerHTML = '';
+        tags.forEach(function(tag) {
+            var container = document.createElement('div');
+
+            // var t = document.createElement('button');
+            // t.className = 'btn btn-default';
+            // t.type = 'button';
+
+            var span = document.createElement('span');
+            span.className = 'badge glyphicon glyphicon-remove';
+            span.innerText = tag;
+
+            // span.click(function() {
+            //     console.log(this);
+            // });
+            span.onclick = function() {
+                console.log(this);
+                var tagToRemove = this.innerText;
+                // Remove parent node
+                this.parentElement.remove();
+                // Splice from tags
+                tags.splice(tagToRemove, 1);
+                //Save new list of tags
+                chrome.storage.sync.set({
+                    'tags': tags
+                }, function() {
+                    console.log('removed tag');
+                });
+            };
+            // t.append(span);
+            container.append(span);
+            // container.append(t);
+            allTags.append(container);
         });
     };
 
