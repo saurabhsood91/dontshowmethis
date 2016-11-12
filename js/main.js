@@ -83,4 +83,23 @@ $(function() {
     // });
     setInterval(checkForDisallowedContent, 5000);
     checkForDisallowedContent();
+    var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
+    photoList.forEach(function(img)
+    {
+        if(!$(img).hasClass('dont-hide'))
+        {
+            isNSFW(img.src,function(output)
+            {
+                console.log(output);
+                if(output.result > 0.25)
+                {
+                    $(img).hide();
+                }
+                else
+                {
+                    $(img).addClass('dont-hide');
+                }
+            })
+        }
+    });
 });
