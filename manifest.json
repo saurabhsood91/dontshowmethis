@@ -6,6 +6,10 @@
   "page_action": {
     "default_title": "Dont Show Me This"
   },
+  "options_ui": {
+      "page": "options.html",
+      "chrome_style": true
+  },
   "content_scripts": [
       {
         "matches": ["https://www.facebook.com/*"],
