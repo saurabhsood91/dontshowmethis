@@ -26,9 +26,11 @@
 var initialize = function() {
     chrome.storage.sync.get({
         'hideNSFW': false,
-        'sites': []
+        'sites': [],
+        'negative': false
     }, function(options) {
         document.querySelector('#optionsNSFW').checked = options.hideNSFW;
+        document.querySelector('#optionsNegative').checked = options.negative;
 
         if(options.sites.length > 0 && options.sites.indexOf('Facebook') != -1) {
             document.querySelector('#optionsFacebook').checked = true;
