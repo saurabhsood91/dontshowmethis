@@ -1,27 +1,3 @@
-// $(function(){
-//     var restoreOptions = function() {
-//         chrome.storage.sync.get({
-//             'hideNSFW': false
-//         }, function(options) {
-//             document.querySelector('#optionsNSFW').checked = options.hideNSFW;
-//         });
-//     };
-//
-//     $('#optionsNSFW').change(function(){
-//         var nsfwValue = document.querySelector('#optionsNSFW').checked;
-//         chrome.storage.sync.set({
-//             'hideNSFW': nsfwValue
-//         }, function() {
-//             $('#status').html('Option Saved!');
-//         });
-//     });
-//
-//     // Load Settings
-//     document.addEventListener('DOMContentLoaded', restoreOptions, false);
-//
-// });
-//
-// // $(function(){})
 var tags = [];
 
 var initialize = function() {
@@ -86,17 +62,10 @@ var initialize = function() {
         tags.forEach(function(tag) {
             var container = document.createElement('div');
 
-            // var t = document.createElement('button');
-            // t.className = 'btn btn-default';
-            // t.type = 'button';
-
             var span = document.createElement('span');
             span.className = 'badge glyphicon glyphicon-remove';
             span.innerText = tag;
 
-            // span.click(function() {
-            //     console.log(this);
-            // });
             span.onclick = function() {
                 console.log(this);
                 var tagToRemove = this.innerText;
