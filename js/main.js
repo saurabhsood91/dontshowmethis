@@ -8,7 +8,7 @@ $(function() {
     };
 
     var checkForDisallowedContent = function() {
-        var posts = $('.userContentWrapper._5pcr').find('._1dwg._1w_m');
+        var posts = $('.userContentWrapper._5pcr:visible').find('._1dwg._1w_m');
         console.log(posts.length);
         // console.log(posts);
         var postsArray = posts.toArray();
@@ -26,8 +26,8 @@ $(function() {
                     console.log('fb photos doesnt have class');
                     isNSFW(link, function(output) {
                         console.log(output);
-                        if(output.result > 0.5) {
-                            $($(fbPhotos[0]).closest('.userContentWrapper._5pcr')).hide()
+                        if(output.result > 0.25) {
+                            $($(fbPhotos[0]).closest('.userContentWrapper._5pcr')).hide();
                         } else {
                             console.log('adding class photos');
                             $(post).addClass('dont-hide');
@@ -42,7 +42,7 @@ $(function() {
                     console.log('link doesnt have class');
                     isNSFW(link, function(output) {
                         console.log(output);
-                        if(output.result > 0.5) {
+                        if(output.result > 0.25) {
                             $($(linkImage[0]).closest('.userContentWrapper._5pcr')).hide();
                         } else {
                             console.log('adding class link');
@@ -64,7 +64,7 @@ $(function() {
                     console.log('videos doesnt have class');
                     isNSFW(link, function(output) {
                         console.log(output);
-                        if(output.result > 0.5) {
+                        if(output.result > 0.25) {
                             $($(videos[0]).closest('.userContentWrapper._5pcr')).hide();
                         } else {
                             // console.log('adding class videos');
