@@ -95,7 +95,7 @@ $(function() {
                 url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/sentiment?",
                 beforeSend: function(xhrObj) {
                     xhrObj.setRequestHeader("Content-Type", "application/json");
-                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "a8d7c1ca87d4433d9bcec1aa74642f4b");
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "314a257042e445f9b21117f86d51a25b");
                 },
                 type: "POST",
                 data: JSON.stringify(Inputdata),
@@ -136,7 +136,7 @@ $(function() {
             .fail(function() {});
     };
     var initialize = function() {
-        console.log('initializing');
+        // console.log('initializing');
         chrome.storage.sync.get({
             'sites': [],
             'hideNSFW': false,
@@ -218,7 +218,10 @@ $(function() {
                                 if (!$(post).hasClass('dont-hide-tags-image')) {
                                     // console.log('fb photos doesnt have class');
                                     microsoftVisionTags(link, function(data) {
-                                        console.log("Image Link: " + link + " Image Tags: " + data['tags'])
+                                        console.log("Image Link: " + link + " Image Tags: \n")
+                                        data['tags'].every(function(tag1) {
+                                            console.log(tag1)
+                                        });
                                         data['tags'].every(function(tag) {
                                             if (avoidTags.indexOf(tag.name) !== -1 && tag.confidence > 0.5) {
                                                 // console.log(tag.name);
@@ -331,5 +334,5 @@ $(function() {
             }
         });
     };
-    setInterval(initialize, 5000);
+    setInterval(initialize, 1000);
 });
