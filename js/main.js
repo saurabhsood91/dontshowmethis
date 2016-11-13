@@ -322,6 +322,30 @@ var microsoftVisionTags = function(imageUrl, callback) {
                                 // $($(videos[0]).closest('.userContentWrapper._5pcr')).hide();
                             }
                         });
+                        var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
+                        photoList.forEach(function(img)
+                        {
+                            if(!$(img).hasClass('dont-hide'))
+                            {
+                                microsoftVisionTags(img.src,function(data)
+                                {
+                                    data['tags'].every(function(tag){
+                                        if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5 )
+                                        {
+                                            console.log(tag.name);
+                                            $(img).hide();
+                                            return false;
+                                        }
+                                        else
+                                        {
+                                            console.log(tag.name);
+                                            console.log("The Tag has to be printed")
+                                            $(img).addClass('dont-hide');
+                                        }
+                                    });
+                                });
+                            }
+                        });
                     }
                 }
             } else if(window.location.href.indexOf('https://twitter.com') !== -1) {
