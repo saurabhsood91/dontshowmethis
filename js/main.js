@@ -9,7 +9,7 @@ $(function() {
 
     var checkForDisallowedContent = function() {
         var posts = $('.userContentWrapper._5pcr:visible').find('._1dwg._1w_m');
-        console.log(posts.length);
+        // console.log(posts.length);
         var postsArray = posts.toArray();
         postsArray.forEach(function(post) {
             var fbPhotos = $(post).find('a._4-eo');
@@ -18,13 +18,14 @@ $(function() {
             if (fbPhotos.length > 0) {
                 var link = $(fbPhotos[0]).find('img').attr('src');
                 if (!$(post).hasClass('dont-hide-image-nsfw')) {
-                    console.log('fb photos doesnt have class');
+                    // console.log('fb photos doesnt have class');
                     isNSFW(link, function(output) {
-                        console.log(output);
+                        // console.log(output);
+                        console.log("Image: " + link + " NSFW: " + output.result + "%" )
                         if (output.result > 0.25) {
                             $($(fbPhotos[0]).closest('.userContentWrapper._5pcr')).remove();
                         } else {
-                            console.log('adding class photos');
+                            // console.log('adding class photos');
                             $(post).addClass('dont-hide-image-nsfw');
                         }
                     });
@@ -33,13 +34,13 @@ $(function() {
             if (linkImage.length > 0) {
                 var link = linkImage[0].src;
                 if (!$(post).hasClass('dont-hide-image-nsfw')) {
-                    console.log('link doesnt have class');
+                    // console.log('link doesnt have class');
                     isNSFW(link, function(output) {
-                        console.log(output);
+                        // console.log(output);
                         if (output.result > 0.25) {
                             $($(linkImage[0]).closest('.userContentWrapper._5pcr')).remove();
                         } else {
-                            console.log('adding class link');
+                            // console.log('adding class link');
                             $(post).addClass('dont-hide-image-nsfw');
                         }
                     });
@@ -48,9 +49,9 @@ $(function() {
             if (videos.length > 0) {
                 var link = videos[0].src;
                 if (!$(post).hasClass('dont-hide-image-nsfw')) {
-                    console.log('videos doesnt have class');
+                    // console.log('videos doesnt have class');
                     isNSFW(link, function(output) {
-                        console.log(output);
+                        // console.log(output);
                         if (output.result > 0.25) {
                             $($(videos[0]).closest('.userContentWrapper._5pcr')).remove();
                         } else {
@@ -68,7 +69,8 @@ $(function() {
         postImageList.forEach(function(img) {
             if (!$(img).hasClass('dont-hide-sentiment')) {
                 isNSFW(img.src, function(output) {
-                    console.log(output)
+                    // console.log(output)
+                    console.log("Image: " + link + " NSFW: " + output.result + "%" )
                     if (output.result > 0.25) {
                         $(img).remove()
                     } else {
@@ -100,14 +102,15 @@ $(function() {
             })
             .done(function(data) {
                 if (!$(content).hasClass('dont-hide-sentiment')) {
-                    console.log(data['documents'][0]['score'])
+                    // console.log(data['documents'][0]['score'])
+                    console.log("Sentiment for the text: " + content.innerText + ". Score:" + data['documents'][0]['score'])
                     if (data['documents'][0]['score'] < 0.50) {
-                        console.log(content.innerText)
+                        // console.log(content.innerText)
                         $(content).remove()
-                        console.log("removed paragraph")
+                        // console.log("removed paragraph")
                     } else {
                         $(content).addClass('dont-hide-sentiment')
-                        console.log("Added to dont-hide class")
+                        // console.log("Added to dont-hide class")
                     }
                 }
             })
@@ -152,7 +155,7 @@ $(function() {
                         photoList.forEach(function(img) {
                             if (!$(img).hasClass('dont-hide-image-nsfw')) {
                                 isNSFW(img.src, function(output) {
-                                    console.log(output);
+                                    // console.log(output);
                                     if (output.result > 0.25) {
                                         $(img).remove();
                                     } else {
@@ -163,7 +166,7 @@ $(function() {
                         });
                     }
                     if (optionNegative) {
-                        console.log('removing negative content');
+                        // console.log('removing negative content');
                         var posts = $('.userContentWrapper._5pcr:visible').find('p').toArray();
                         posts.forEach(function(paragraph) {
                             microsoftSentimentAnalysis(paragraph);
@@ -190,7 +193,7 @@ $(function() {
                                         return true;
                                     }
                                 });
-                                console.log("Is Present: " + isPresent)
+                                // console.log("Is Present: " + isPresent)
                                 if(isPresent) {
                                     $(paragraph).parents('.userContentWrapper._5pcr:visible').remove();
                                     
@@ -204,7 +207,7 @@ $(function() {
 
                         // Images + Videos
                         var posts = $('.userContentWrapper._5pcr:visible').find('._1dwg._1w_m');
-                        console.log(posts.length);
+                        // console.log(posts.length);
                         var postsArray = posts.toArray();
                         postsArray.forEach(function(post) {
                             var fbPhotos = $(post).find('a._4-eo');
@@ -213,17 +216,18 @@ $(function() {
                             if (fbPhotos.length > 0) {
                                 var link = $(fbPhotos[0]).find('img').attr('src');
                                 if (!$(post).hasClass('dont-hide-tags-image')) {
-                                    console.log('fb photos doesnt have class');
+                                    // console.log('fb photos doesnt have class');
                                     microsoftVisionTags(link, function(data) {
+                                        console.log("Image Link: " + link + " Image Tags: " + data['tags'])
                                         data['tags'].every(function(tag) {
                                             if (avoidTags.indexOf(tag.name) !== -1 && tag.confidence > 0.5) {
-                                                console.log(tag.name);
+                                                // console.log(tag.name);
                                                 $($(fbPhotos[0]).closest('.userContentWrapper._5pcr')).remove();
-                                                console.log("The Tag has to be avoided")
+                                                // console.log("The Tag has to be avoided")
                                                 return false;
                                             } else {
-                                                console.log(tag.name);
-                                                console.log("The Tag has to be printed");
+                                                // console.log(tag.name);
+                                                // console.log("The Tag has to be printed");
                                                 $(post).addClass('dont-hide-tags-image');
                                             }
                                         });
@@ -233,17 +237,17 @@ $(function() {
                             if (linkImage.length > 0) {
                                 var link = linkImage[0].src;
                                 if (!$(post).hasClass('dont-hide-tags-image')) {
-                                    console.log('link doesnt have class');
+                                    // console.log('link doesnt have class');
                                     microsoftVisionTags(link, function(data) {
                                         data['tags'].every(function(tag) {
                                             if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
-                                                console.log(tag.name);
+                                                // console.log(tag.name);
                                                 $($(linkImage[0]).closest('.userContentWrapper._5pcr')).remove();
-                                                console.log("The Tag has to be avoided");
+                                                // console.log("The Tag has to be avoided");
                                                 return false;
                                             } else {
-                                                console.log(tag.name);
-                                                console.log("The Tag has to be printed");
+                                                // console.log(tag.name);
+                                                // console.log("The Tag has to be printed");
                                                 $(post).addClass('dont-hide-tags-image');
                                             }
                                         });
@@ -253,17 +257,17 @@ $(function() {
                             if (videos.length > 0) {
                                 var link = videos[0].src;
                                 if (!$(post).hasClass('dont-hide-tags-image')) {
-                                    console.log('videos doesnt have class');
+                                    // console.log('videos doesnt have class');
                                     microsoftVisionTags(link, function(data) {
                                         data['tags'].every(function(tag) {
                                             if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
-                                                console.log(tag.name);
+                                                // console.log(tag.name);
                                                 $($(videos[0]).closest('.userContentWrapper._5pcr')).remove();
-                                                console.log("The Tag has to be avoided");
+                                                // console.log("The Tag has to be avoided");
                                                 return false;
                                             } else {
-                                                console.log(tag.name);
-                                                console.log("The Tag has to be printed");
+                                                // console.log(tag.name);
+                                                // console.log("The Tag has to be printed");
                                                 $(post).addClass('dont-hide-tags-image');
                                             }
                                         });
@@ -277,12 +281,12 @@ $(function() {
                                 microsoftVisionTags(img.src, function(data) {
                                     data['tags'].every(function(tag) {
                                         if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
-                                            console.log(tag.name);
+                                            // console.log(tag.name);
                                             $(img).remove();
                                             return false;
                                         } else {
-                                            console.log(tag.name);
-                                            console.log("The Tag has to be printed")
+                                            // console.log(tag.name);
+                                            // console.log("The Tag has to be printed")
                                             $(img).addClass('dont-hide-tags-image');
                                         }
                                     });
@@ -293,7 +297,7 @@ $(function() {
                 }
             } else if (window.location.href.indexOf('https://twitter.com') !== -1) {
                 if (sites.length > 0 && sites.indexOf('Twitter') !== -1) {
-                    console.log('running for twitter');
+                    // console.log('running for twitter');
                     if (optionNfsw) {
                         checkForDisallowedContentTwitter();
                     }
@@ -310,12 +314,12 @@ $(function() {
                                 microsoftVisionTags(img.src, function(data) {
                                     data['tags'].every(function(tag) {
                                         if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
-                                            console.log('removing tag ' + tag.name);
+                                            // console.log('removing tag ' + tag.name);
                                             $(img).remove();
                                             return false;
                                         } else {
-                                            console.log(tag.name);
-                                            console.log("The Tag has to be printed")
+                                            // console.log(tag.name);
+                                            // console.log("The Tag has to be printed")
                                             $(img).addClass('dont-hide-tags-image');
                                         }
                                     });
