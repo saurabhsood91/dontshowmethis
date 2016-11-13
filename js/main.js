@@ -184,7 +184,7 @@ $(function() {
             if (window.location.href.indexOf('https://www.facebook.com') !== -1) {
                 if (sites.length > 0 && sites.indexOf('Facebook') !== -1) {
                     if (optionNfsw) {
-                        setInterval(checkForDisallowedContent, 5000);
+                        // setInterval(checkForDisallowedContent, 5000);
                         checkForDisallowedContent();
                         var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
                         photoList.forEach(function(img) {
@@ -202,12 +202,12 @@ $(function() {
                     }
                     if (optionNegative) {
                         console.log('removing negative content');
-                        setInterval(function() {
-                            var posts = $('.userContentWrapper._5pcr:visible').find('p').toArray();
-                            posts.forEach(function(paragraph) {
-                                microsoftSentimentAnalysis(paragraph)
-                            })
-                        }, 5000);
+                        // setInterval(function() {
+                        var posts = $('.userContentWrapper._5pcr:visible').find('p').toArray();
+                        posts.forEach(function(paragraph) {
+                            microsoftSentimentAnalysis(paragraph)
+                        })
+                        // }, 5000);
                     }
 
                     if (avoidTags.length > 0) {
@@ -225,7 +225,7 @@ $(function() {
                                 // $($(fbPhotos[0]).closest('.userContentWrapper._5pcr')).hide()
                                 // debugger;
                                 // console.log(link);
-                                setInterval(function() {
+                                // setInterval(function() {
                                     if (!$(post).hasClass('dont-hide')) {
                                         console.log('fb photos doesnt have class');
                                         microsoftVisionTags(link, function(data) {
@@ -243,11 +243,11 @@ $(function() {
                                             });
                                         });
                                     }
-                                }, 5000);
+                                // }, 5000);
                             }
                             if (linkImage.length > 0) {
                                 var link = linkImage[0].src;
-                                setInterval(function() {
+                                // setInterval(function() {
                                     if (!$(post).hasClass('dont-hide')) {
                                         console.log('link doesnt have class');
                                         microsoftVisionTags(link, function(data) {
@@ -265,7 +265,7 @@ $(function() {
                                             });
                                         });
                                     }
-                                }, 5000);
+                                // }, 5000);
 
                                 // debugger;
                                 // console.log(link);
@@ -277,7 +277,7 @@ $(function() {
                             if (videos.length > 0) {
                                 // console.log(videos[0].src);
                                 var link = videos[0].src;
-                                setInterval(function() {
+                                // setInterval(function() {
                                     if (!$(post).hasClass('dont-hide')) {
                                         console.log('videos doesnt have class');
                                         microsoftVisionTags(link, function(data) {
@@ -295,12 +295,12 @@ $(function() {
                                             });
                                         });
                                     }
-                                }, 5000);
+                                // }, 5000);
                             }
                         });
                         var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
                         photoList.forEach(function(img) {
-                            setInterval(function() {
+                            // setInterval(function() {
                                 if (!$(img).hasClass('dont-hide')) {
                                     microsoftVisionTags(img.src, function(data) {
                                         data['tags'].every(function(tag) {
@@ -316,7 +316,7 @@ $(function() {
                                         });
                                     });
                                 }
-                            }, 5000);
+                            // }, 5000);
                         });
                     }
                 }
@@ -324,21 +324,22 @@ $(function() {
                 if (sites.length > 0 && sites.indexOf('Twitter') !== -1) {
                     console.log('running for twitter');
                     if (optionNfsw) {
-                        setInterval(checkForDisallowedContentTwitter, 5000);
+                        // setInterval(checkForDisallowedContentTwitter, 5000);
+                        checkForDisallowedContentTwitter();
                     }
                     if (optionNegative) {
-                        setInterval(function() {
+                        // setInterval(function() {
                             var posts = $('.TweetTextSize.js-tweet-text.tweet-text').toArray();
                             posts.forEach(function(paragraph) {
                                 microsoftSentimentAnalysis(paragraph)
                             });
-                        }, 5000);
+                        // }, 5000);
                     }
                 }
             }
         });
     };
     // document.addEventListener('DOMContentLoaded', initialize, false);
-    initialize();
+    setInterval(initialize, 5000);
 
 });
