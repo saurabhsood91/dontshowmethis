@@ -1,10 +1,14 @@
 {
   "manifest_version": 2,
-  "name": "Dont Show Me This",
+  "name": "Social Tag",
   "description": "Chrome Extension to hide certain content from social networks",
   "version": "1.0",
   "page_action": {
-    "default_title": "Dont Show Me This"
+    "default_title": "Social Tag",
+    "default_icon": {
+            "16": "icon16.png",
+            "128": "icon128.png"
+          }
   },
   "options_ui": {
       "page": "options.html",
@@ -16,6 +20,11 @@
         "js": ["bower_components/jquery/dist/jquery.js", "js/algorithmia.js", "js/main.js"]
       }
     ],
+  "icons": { 
+      "16": "icon16.png",
+      "128": "icon128.png" 
+    },
+
   "permissions": [
     "storage",
     "activeTab",
