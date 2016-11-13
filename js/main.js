@@ -225,7 +225,7 @@ $(function() {
                                 // $($(fbPhotos[0]).closest('.userContentWrapper._5pcr')).hide()
                                 // debugger;
                                 // console.log(link);
-                                setInterval(function(){
+                                setInterval(function() {
                                     if (!$(post).hasClass('dont-hide')) {
                                         console.log('fb photos doesnt have class');
                                         microsoftVisionTags(link, function(data) {
@@ -247,23 +247,23 @@ $(function() {
                             }
                             if (linkImage.length > 0) {
                                 var link = linkImage[0].src;
-                                setInterval(function(){
+                                setInterval(function() {
                                     if (!$(post).hasClass('dont-hide')) {
                                         console.log('link doesnt have class');
-                                            microsoftVisionTags(link, function(data) {
-                                                data['tags'].every(function(tag) {
-                                                    if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
-                                                        console.log(tag.name);
-                                                        $($(linkImage[0]).closest('.userContentWrapper._5pcr')).remove();
-                                                        console.log("The Tag has to be avoided");
-                                                        return false;
-                                                    } else {
-                                                        console.log(tag.name);
-                                                        console.log("The Tag has to be printed");
-                                                        $(post).addClass('dont-hide');
-                                                    }
-                                                });
+                                        microsoftVisionTags(link, function(data) {
+                                            data['tags'].every(function(tag) {
+                                                if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
+                                                    console.log(tag.name);
+                                                    $($(linkImage[0]).closest('.userContentWrapper._5pcr')).remove();
+                                                    console.log("The Tag has to be avoided");
+                                                    return false;
+                                                } else {
+                                                    console.log(tag.name);
+                                                    console.log("The Tag has to be printed");
+                                                    $(post).addClass('dont-hide');
+                                                }
                                             });
+                                        });
                                     }
                                 }, 5000);
 
@@ -277,44 +277,44 @@ $(function() {
                             if (videos.length > 0) {
                                 // console.log(videos[0].src);
                                 var link = videos[0].src;
-                                setInterval(function(){
+                                setInterval(function() {
                                     if (!$(post).hasClass('dont-hide')) {
                                         console.log('videos doesnt have class');
-                                            microsoftVisionTags(link, function(data) {
-                                                data['tags'].every(function(tag) {
-                                                    if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
-                                                        console.log(tag.name);
-                                                        $($(videos[0]).closest('.userContentWrapper._5pcr')).remove();
-                                                        console.log("The Tag has to be avoided");
-                                                        return false;
-                                                    } else {
-                                                        console.log(tag.name);
-                                                        console.log("The Tag has to be printed");
-                                                        $(post).addClass('dont-hide');
-                                                    }
-                                                });
+                                        microsoftVisionTags(link, function(data) {
+                                            data['tags'].every(function(tag) {
+                                                if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
+                                                    console.log(tag.name);
+                                                    $($(videos[0]).closest('.userContentWrapper._5pcr')).remove();
+                                                    console.log("The Tag has to be avoided");
+                                                    return false;
+                                                } else {
+                                                    console.log(tag.name);
+                                                    console.log("The Tag has to be printed");
+                                                    $(post).addClass('dont-hide');
+                                                }
                                             });
+                                        });
                                     }
                                 }, 5000);
                             }
                         });
                         var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
                         photoList.forEach(function(img) {
-                            setInterval(function(){
+                            setInterval(function() {
                                 if (!$(img).hasClass('dont-hide')) {
-                                        microsoftVisionTags(img.src, function(data) {
-                                            data['tags'].every(function(tag) {
-                                                if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
-                                                    console.log(tag.name);
-                                                    $(img).remove();
-                                                    return false;
-                                                } else {
-                                                    console.log(tag.name);
-                                                    console.log("The Tag has to be printed")
-                                                    $(img).addClass('dont-hide');
-                                                }
-                                            });
+                                    microsoftVisionTags(img.src, function(data) {
+                                        data['tags'].every(function(tag) {
+                                            if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
+                                                console.log(tag.name);
+                                                $(img).remove();
+                                                return false;
+                                            } else {
+                                                console.log(tag.name);
+                                                console.log("The Tag has to be printed")
+                                                $(img).addClass('dont-hide');
+                                            }
                                         });
+                                    });
                                 }
                             }, 5000);
                         });
