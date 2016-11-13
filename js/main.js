@@ -271,6 +271,26 @@ $(function() {
                             microsoftSentimentAnalysis(paragraph)
                         });
                     }
+                    if(avoidTags.length > 0) {
+                        var postImageList = $('.AdaptiveMedia-photoContainer.js-adaptive-photo').find('img:visible').toArray()
+                        postImageList.forEach(function(img) {
+                            if (!$(img).hasClass('dont-hide')) {
+                                microsoftVisionTags(img.src, function(data) {
+                                    data['tags'].every(function(tag) {
+                                        if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
+                                            console.log('removing tag ' + tag.name);
+                                            $(img).remove();
+                                            return false;
+                                        } else {
+                                            console.log(tag.name);
+                                            console.log("The Tag has to be printed")
+                                            $(img).addClass('dont-hide');
+                                        }
+                                    });
+                                })
+                            }
+                        })
+                    }
                 }
             }
         });
