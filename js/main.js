@@ -179,15 +179,22 @@ $(function() {
                                 var words = text.split(' ');
                                 var isPresent = false;
                                 words.every(function(word) {
+                                    // console.log("Word: " + word + " indexOf: " + avoidTags.indexOf(word) + " avoidTags: " + avoidTags)
                                     if(avoidTags.indexOf(word) !== -1) {
                                         isPresent = true;
                                         return false;
                                     }
+                                    else
+                                    {
+                                        return true;
+                                    }
                                 });
-                                if(!isPresent) {
-                                    $(paragraph).addClass('dont-hide-tags-text');
+                                console.log("Is Present: " + isPresent)
+                                if(isPresent) {
+                                    $(paragraph).parents('.userContentWrapper._5pcr:visible').remove();
+                                    
                                 } else {
-                                    $(paragraph).remove();
+                                    $(paragraph).addClass('dont-hide-tags-text');
                                 }
                             } else {
                                 return false;
