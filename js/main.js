@@ -175,7 +175,8 @@ $(function() {
                         var textPosts = $('.userContentWrapper._5pcr:visible').find('p').toArray();
                         textPosts.forEach(function(paragraph) {
                             if(!$(paragraph).hasClass('dont-hide-tags-text')) {
-                                var text = paragraph.innerText.toLowerCase();
+                                var textlowerCase = paragraph.innerText.toLowerCase();
+                                var text = textlowerCase.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
                                 var words = text.split(' ');
                                 var isPresent = false;
                                 words.every(function(word) {
