@@ -17,7 +17,7 @@ $(function() {
             var linkImage = $(post).find('._6l-.__c_').find('img');
             if (fbPhotos.length > 0) {
                 var link = $(fbPhotos[0]).find('img').attr('src');
-                if (!$(post).hasClass('dont-hide')) {
+                if (!$(post).hasClass('dont-hide-image-nsfw')) {
                     console.log('fb photos doesnt have class');
                     isNSFW(link, function(output) {
                         console.log(output);
@@ -25,14 +25,14 @@ $(function() {
                             $($(fbPhotos[0]).closest('.userContentWrapper._5pcr')).remove();
                         } else {
                             console.log('adding class photos');
-                            $(post).addClass('dont-hide');
+                            $(post).addClass('dont-hide-image-nsfw');
                         }
                     });
                 }
             }
             if (linkImage.length > 0) {
                 var link = linkImage[0].src;
-                if (!$(post).hasClass('dont-hide')) {
+                if (!$(post).hasClass('dont-hide-image-nsfw')) {
                     console.log('link doesnt have class');
                     isNSFW(link, function(output) {
                         console.log(output);
@@ -40,21 +40,21 @@ $(function() {
                             $($(linkImage[0]).closest('.userContentWrapper._5pcr')).remove();
                         } else {
                             console.log('adding class link');
-                            $(post).addClass('dont-hide');
+                            $(post).addClass('dont-hide-image-nsfw');
                         }
                     });
                 }
             }
             if (videos.length > 0) {
                 var link = videos[0].src;
-                if (!$(post).hasClass('dont-hide')) {
+                if (!$(post).hasClass('dont-hide-image-nsfw')) {
                     console.log('videos doesnt have class');
                     isNSFW(link, function(output) {
                         console.log(output);
                         if (output.result > 0.25) {
                             $($(videos[0]).closest('.userContentWrapper._5pcr')).remove();
                         } else {
-                            $(post).addClass('dont-hide');
+                            $(post).addClass('dont-hide-image-nsfw');
                         }
                     });
                 }
@@ -66,13 +66,13 @@ $(function() {
     var checkForDisallowedContentTwitter = function() {
         postImageList = $('.AdaptiveMedia-photoContainer.js-adaptive-photo').find('img:visible').toArray()
         postImageList.forEach(function(img) {
-            if (!$(img).hasClass('dont-hide')) {
+            if (!$(img).hasClass('dont-hide-sentiment')) {
                 isNSFW(img.src, function(output) {
                     console.log(output)
                     if (output.result > 0.25) {
                         $(img).remove()
                     } else {
-                        $(img).addClass('dont-hide');
+                        $(img).addClass('dont-hide-sentiment');
                     }
                 })
             }
@@ -99,14 +99,14 @@ $(function() {
                 data: JSON.stringify(Inputdata),
             })
             .done(function(data) {
-                if (!$(content).hasClass('dont-hide')) {
+                if (!$(content).hasClass('dont-hide-sentiment')) {
                     console.log(data['documents'][0]['score'])
                     if (data['documents'][0]['score'] < 0.50) {
                         console.log(content.innerText)
                         $(content).remove()
                         console.log("removed paragraph")
                     } else {
-                        $(content).addClass('dont-hide')
+                        $(content).addClass('dont-hide-sentiment')
                         console.log("Added to dont-hide class")
                     }
                 }
@@ -150,13 +150,13 @@ $(function() {
                         checkForDisallowedContent();
                         var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
                         photoList.forEach(function(img) {
-                            if (!$(img).hasClass('dont-hide')) {
+                            if (!$(img).hasClass('dont-hide-image-nsfw')) {
                                 isNSFW(img.src, function(output) {
                                     console.log(output);
                                     if (output.result > 0.25) {
                                         $(img).remove();
                                     } else {
-                                        $(img).addClass('dont-hide');
+                                        $(img).addClass('dont-hide-image-nsfw');
                                     }
                                 })
                             }
@@ -166,11 +166,35 @@ $(function() {
                         console.log('removing negative content');
                         var posts = $('.userContentWrapper._5pcr:visible').find('p').toArray();
                         posts.forEach(function(paragraph) {
-                            microsoftSentimentAnalysis(paragraph)
+                            microsoftSentimentAnalysis(paragraph);
                         })
                     }
 
                     if (avoidTags.length > 0) {
+                        // Text
+                        var textPosts = $('.userContentWrapper._5pcr:visible').find('p').toArray();
+                        textPosts.forEach(function(paragraph) {
+                            if(!$(paragraph).hasClass('dont-hide-tags-text')) {
+                                var text = paragraph.innerText.toLowerCase();
+                                var words = text.split(' ');
+                                var isPresent = false;
+                                words.every(function(word) {
+                                    if(avoidTags.indexOf(word) !== -1) {
+                                        isPresent = true;
+                                        return false;
+                                    }
+                                });
+                                if(!isPresent) {
+                                    $(paragraph).addClass('dont-hide-tags-text');
+                                } else {
+                                    $(paragraph).remove();
+                                }
+                            } else {
+                                return false;
+                            }
+                        });
+
+                        // Images + Videos
                         var posts = $('.userContentWrapper._5pcr:visible').find('._1dwg._1w_m');
                         console.log(posts.length);
                         var postsArray = posts.toArray();
@@ -180,7 +204,7 @@ $(function() {
                             var linkImage = $(post).find('._6l-.__c_').find('img');
                             if (fbPhotos.length > 0) {
                                 var link = $(fbPhotos[0]).find('img').attr('src');
-                                if (!$(post).hasClass('dont-hide')) {
+                                if (!$(post).hasClass('dont-hide-tags-image')) {
                                     console.log('fb photos doesnt have class');
                                     microsoftVisionTags(link, function(data) {
                                         data['tags'].every(function(tag) {
@@ -192,7 +216,7 @@ $(function() {
                                             } else {
                                                 console.log(tag.name);
                                                 console.log("The Tag has to be printed");
-                                                $(post).addClass('dont-hide');
+                                                $(post).addClass('dont-hide-tags-image');
                                             }
                                         });
                                     });
@@ -200,7 +224,7 @@ $(function() {
                             }
                             if (linkImage.length > 0) {
                                 var link = linkImage[0].src;
-                                if (!$(post).hasClass('dont-hide')) {
+                                if (!$(post).hasClass('dont-hide-tags-image')) {
                                     console.log('link doesnt have class');
                                     microsoftVisionTags(link, function(data) {
                                         data['tags'].every(function(tag) {
@@ -212,7 +236,7 @@ $(function() {
                                             } else {
                                                 console.log(tag.name);
                                                 console.log("The Tag has to be printed");
-                                                $(post).addClass('dont-hide');
+                                                $(post).addClass('dont-hide-tags-image');
                                             }
                                         });
                                     });
@@ -220,7 +244,7 @@ $(function() {
                             }
                             if (videos.length > 0) {
                                 var link = videos[0].src;
-                                if (!$(post).hasClass('dont-hide')) {
+                                if (!$(post).hasClass('dont-hide-tags-image')) {
                                     console.log('videos doesnt have class');
                                     microsoftVisionTags(link, function(data) {
                                         data['tags'].every(function(tag) {
@@ -232,7 +256,7 @@ $(function() {
                                             } else {
                                                 console.log(tag.name);
                                                 console.log("The Tag has to be printed");
-                                                $(post).addClass('dont-hide');
+                                                $(post).addClass('dont-hide-tags-image');
                                             }
                                         });
                                     });
@@ -241,7 +265,7 @@ $(function() {
                         });
                         var photoList = $('._4-u2._24on._5t27._4-u8').find('img').toArray();
                         photoList.forEach(function(img) {
-                            if (!$(img).hasClass('dont-hide')) {
+                            if (!$(img).hasClass('dont-hide-tags-image')) {
                                 microsoftVisionTags(img.src, function(data) {
                                     data['tags'].every(function(tag) {
                                         if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
@@ -251,7 +275,7 @@ $(function() {
                                         } else {
                                             console.log(tag.name);
                                             console.log("The Tag has to be printed")
-                                            $(img).addClass('dont-hide');
+                                            $(img).addClass('dont-hide-tags-image');
                                         }
                                     });
                                 });
@@ -274,7 +298,7 @@ $(function() {
                     if(avoidTags.length > 0) {
                         var postImageList = $('.AdaptiveMedia-photoContainer.js-adaptive-photo').find('img:visible').toArray()
                         postImageList.forEach(function(img) {
-                            if (!$(img).hasClass('dont-hide')) {
+                            if (!$(img).hasClass('dont-hide-tags-image')) {
                                 microsoftVisionTags(img.src, function(data) {
                                     data['tags'].every(function(tag) {
                                         if (avoidTags.indexOf(tag.name) != -1 && tag.confidence > 0.5) {
@@ -284,7 +308,7 @@ $(function() {
                                         } else {
                                             console.log(tag.name);
                                             console.log("The Tag has to be printed")
-                                            $(img).addClass('dont-hide');
+                                            $(img).addClass('dont-hide-tags-image');
                                         }
                                     });
                                 })
